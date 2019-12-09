@@ -2941,10 +2941,14 @@ def reuse_name_scope_of_tensor(x, prefix="", postfix="", add_tensor_name=False):
   :param bool add_tensor_name:
   :return: reuse the name scope of x, e.g. "layer0/rec", yields scope
   """
+  name_scope = prefix + get_name_scope_of_tensor(x)
   if add_tensor_name:
     from Util import unicode_to_str
-    postfix = "/%s%s" % (unicode_to_str(os.path.basename(x.name).split(":")[0]), postfix)
-  with reuse_name_scope(prefix + get_name_scope_of_tensor(x) + postfix, absolute=True) as scope:
+    postfix = "%s%s" % (unicode_to_str(os.path.basename(x.name).split(":")[0]), postfix)
+    if name_scope:
+      postfix = "/" + postfix
+  name_scope += postfix
+  with reuse_name_scope(name_scope, absolute=True) as scope:
     yield scope
 
 
