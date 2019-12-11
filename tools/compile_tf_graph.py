@@ -706,6 +706,8 @@ def main(argv):
 
     if args.output_file and os.path.splitext(args.output_file)[1] in [".meta", ".metatxt"]:
       # https://www.tensorflow.org/api_guides/python/meta_graph
+      from TFUtil import CollectionKeys
+      del tf.get_collection_ref(CollectionKeys.RETURNN_LAYERS)[:]
       saver = tf.train.Saver(
         var_list=network.get_saveable_params_list(), max_to_keep=2 ** 31 - 1)
       graph_def = saver.export_meta_graph()
