@@ -1750,34 +1750,34 @@ class _SubnetworkRecCell(object):
         data_placeholder = data.get_placeholder_as_time_major()
         with tf.name_scope("check_data_len"):
           data_len = tf.shape(data_placeholder)[0]
-          if common_data_len is None:
-            # Check for first key if input length matches data length
-            if input_seq_len is not None:
-              with tf.control_dependencies(
-                  [tf.assert_equal(
-                    tf.reduce_max(input_seq_len), data_len,
-                    ["RecLayer %r with sources %r:" % (rec_layer.name, rec_layer.sources),
-                     " The length of the sources (", tf.reduce_max(input_seq_len),
-                     ") differ from the length of the target ", key, "(", data_len, ")."])]):
-                data_len = tf.identity(data_len)
-            if fixed_seq_len is not None:
-              with tf.control_dependencies(
-                  [tf.assert_equal(
-                    tf.reduce_max(fixed_seq_len), data_len,
-                    ["RecLayer %r:" % (rec_layer.get_absolute_name(),),
-                     " The predefined length (", tf.reduce_max(fixed_seq_len),
-                     ") differs from the length of the target ", key, "(", data_len, ")."])]):
-                data_len = tf.identity(data_len)
-            common_data_len = data_len
-          else:
-            # Check from second key on if data length is equal for all external data
-            with tf.control_dependencies([
-              tf.assert_equal(
-                common_data_len, data_len,
-                ["RecLayer %r:" % rec_layer.name, " The length of all targets (%s) " % ", ".join(used_keys),
-                 " has to be the same. Found length ", data_len, " for %s, which does not match length " % key,
-                 common_data_len, " of the other data."])]):
-              data_len = tf.identity(data_len)
+#           if common_data_len is None:
+#             # Check for first key if input length matches data length
+#             if input_seq_len is not None:
+#               with tf.control_dependencies(
+#                   [tf.assert_equal(
+#                     tf.reduce_max(input_seq_len), data_len,
+#                     ["RecLayer %r with sources %r:" % (rec_layer.name, rec_layer.sources),
+#                      " The length of the sources (", tf.reduce_max(input_seq_len),
+#                      ") differ from the length of the target ", key, "(", data_len, ")."])]):
+#                 data_len = tf.identity(data_len)
+#             if fixed_seq_len is not None:
+#               with tf.control_dependencies(
+#                   [tf.assert_equal(
+#                     tf.reduce_max(fixed_seq_len), data_len,
+#                     ["RecLayer %r:" % (rec_layer.get_absolute_name(),),
+#                      " The predefined length (", tf.reduce_max(fixed_seq_len),
+#                      ") differs from the length of the target ", key, "(", data_len, ")."])]):
+#                 data_len = tf.identity(data_len)
+#             common_data_len = data_len
+#           else:
+#             # Check from second key on if data length is equal for all external data
+#             with tf.control_dependencies([
+#               tf.assert_equal(
+#                 common_data_len, data_len,
+#                 ["RecLayer %r:" % rec_layer.name, " The length of all targets (%s) " % ", ".join(used_keys),
+#                  " has to be the same. Found length ", data_len, " for %s, which does not match length " % key,
+#                  common_data_len, " of the other data."])]):
+#               data_len = tf.identity(data_len)
         data_ta = tf.TensorArray(
           name=key + "_ta",
           dtype=data.dtype,
