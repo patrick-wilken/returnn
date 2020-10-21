@@ -110,13 +110,16 @@ class MapDatasetBase(CachedDataset2):
       raise NotImplementedError
 
     try:
-      self._seq_order = self.get_seq_order_for_epoch(
-        epoch=epoch, num_seqs=len(self), get_seq_len=self.get_seq_len)
+      self._seq_order = self.get_seq_order(epoch=epoch)
     except OptionalNotImplementedError:
-      # only support seq_ordering that need no length here
-      assert self.seq_ordering in ["default", "reverse", "random"]
-      self._seq_order = self.get_seq_order_for_epoch(
-        epoch=epoch, num_seqs=len(self), get_seq_len=None)
+      try:
+        self._seq_order = self.get_seq_order_for_epoch(
+          epoch=epoch, num_seqs=len(self), get_seq_len=self.get_seq_len)
+      except OptionalNotImplementedError:
+        # only support seq_ordering that need no length here
+        assert self.seq_ordering in ["default", "reverse", "random"]
+        self._seq_order = self.get_seq_order_for_epoch(
+          epoch=epoch, num_seqs=len(self), get_seq_len=None)
 
   def _collect_single_seq(self, seq_idx):
     """
