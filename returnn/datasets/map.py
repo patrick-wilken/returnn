@@ -170,6 +170,8 @@ class MapDatasetBase(CachedDataset2):
     :return: dtype as str, e.g. "int32" or "float32"
     :rtype: str
     """
+    if key in self.num_outputs and "dtype" in self.num_outputs[key]:
+      return self.num_outputs[key]["dtype"]
     if self.is_data_sparse(key):
       return "int32"
     return "float32"
