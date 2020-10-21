@@ -92,7 +92,8 @@ class MapDatasetBase(CachedDataset2):
     """
     :rtype: int
     """
-    return len(self)
+    assert self._seq_order is not None
+    return len(self._seq_order)
 
   def init_seq_order(self, epoch=None, seq_list=None, seq_order=None):
     """
